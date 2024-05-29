@@ -1,0 +1,54 @@
+#fifo_pr
+from queue import Queue  
+def pageFaults(pages, n, capacity): 
+    s=set() 
+    indexes = Queue()  
+    page_faults = 0
+    for i in range(n): 
+        if (len(s) < capacity): 
+            if (pages[i] not in s): 
+                s.add(pages[i])  
+                page_faults += 1
+                indexes.put(pages[i])  
+        else: 
+            if (pages[i] not in s):  
+                val = indexes.queue[0] #[capacity-1]    
+                indexes.get()  
+                s.remove(val)  
+                s.add(pages[i])  
+                indexes.put(pages[i])    
+                page_faults += 1 
+    return page_faults 
+pages = [1,2,3,4,1,2,5,1,2,3,4,5]  
+n = len(pages)  
+capacity = 3
+print(pageFaults(pages, n, capacity)) 
+
+#lru_pr
+def page_f(pages,n,c):
+    s=set()
+    indexes={}
+    f=0
+    for i in range(n):
+        if len(s)<c:
+            if pages[i] not in s:
+                s.add(pages[i])
+                f+=1
+            indexes[pages[i]]=i
+        else:
+            if pages[i] not in s:
+                lru=float('inf') #mru=float('-inf')
+                for j in s:
+                    if indexes[j]<lru:#>mru
+                        lru=indexes[j]#mru
+                        val=j
+                s.remove(val)
+                s.add(pages[i])
+                f+=1
+            indexes[pages[i]]=i
+    return f
+pages = [1,2,3,4,1,2,5,1,2,3,4,5] 
+n = len(pages) 
+capacity = 3
+print(paage_f(pages, n, capacity))
+
